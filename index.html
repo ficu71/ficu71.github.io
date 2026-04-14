@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>F1CU SPACE // 71hax0r</title>
-    <meta name="description" content="AI jailbreak research. Python. Red teaming. Break the limits. Unleash the truth. f1 == freedom."‎>
+    <meta name="description" content="AI jailbreak research. Python. Red teaming. Break the limits. Unleash the truth. f1 == freedom.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
@@ -28,6 +28,7 @@
             font-size: 14px;
             line-height: 1.6;
             overflow-x: hidden;
+            cursor: crosshair;
         }
         ::selection { background: var(--green); color: var(--bg); }
         .scanline {
@@ -42,6 +43,19 @@
             pointer-events: none; z-index: 9998;
             animation: pulse 4s ease-in-out infinite;
         }
+        .crt-turnon {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 10000;
+            pointer-events: none;
+            animation: crt-on 1.2s ease-out forwards;
+        }
+        @keyframes crt-on {
+            0% { opacity: 1; transform: scaleY(1); }
+            40% { opacity: 1; transform: scaleY(0.01); }
+            60% { opacity: 1; transform: scaleY(0.01); }
+            100% { opacity: 0; transform: scaleY(0); }
+        }
         @keyframes pulse {
             0%, 100% { opacity: 0.3; }
             50% { opacity: 0.6; }
@@ -51,17 +65,15 @@
             text-align: center;
             margin-bottom: 60px;
             position: relative;
+            perspective: 1000px;
         }
         .hero img {
             max-width: 420px;
             width: 90%;
             border-radius: 8px;
             box-shadow: 0 0 60px rgba(0,255,65,0.15), 0 0 100px rgba(184,41,255,0.1);
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            transition: transform 0.15s ease-out;
+            transform-style: preserve-3d;
         }
         h1 {
             font-size: 3rem;
@@ -84,9 +96,16 @@
             margin-bottom: 50px;
             border-left: 2px solid #151515;
             padding-left: 24px;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, opacity 0.4s, transform 0.4s;
+            opacity: 0.2;
+            transform: translateX(-20px);
         }
-        .section:hover { border-left-color: var(--green-dim); }
+        .section.active {
+            opacity: 1;
+            transform: translateX(0);
+            border-left-color: var(--green-dim);
+        }
+        .section:hover { border-left-color: var(--purple); }
         .prompt {
             color: var(--green);
             font-weight: 700;
@@ -124,15 +143,60 @@
         .codeblock .comment { color: var(--muted); }
         .codeblock .keyword { color: var(--magenta); }
         .codeblock .string { color: var(--warn); }
+        .terminal-box {
+            background: #080808;
+            border: 1px solid #1f1f1f;
+            border-radius: 6px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .terminal-header {
+            background: #111;
+            padding: 8px 14px;
+            font-size: 11px;
+            color: var(--muted);
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .terminal-header span { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .t-red { background: var(--alert); }
+        .t-yellow { background: var(--warn); }
+        .t-green { background: var(--green); }
+        .terminal-body {
+            padding: 14px 16px;
+            min-height: 180px;
+            max-height: 320px;
+            overflow-y: auto;
+            font-size: 12px;
+            color: var(--fg);
+        }
+        .terminal-line { margin-bottom: 6px; white-space: pre-wrap; word-break: break-word; }
+        .terminal-input-line {
+            display: flex; align-items: baseline; margin-top: 8px;
+        }
+        .terminal-prompt { color: var(--green-dim); margin-right: 8px; white-space: nowrap; }
+        .terminal-input {
+            background: transparent; border: none; outline: none;
+            color: var(--fg); font-family: inherit; font-size: 12px;
+            flex: 1; caret-color: var(--green);
+        }
         .seventy-one {
             position: fixed;
             font-size: 11px;
             color: var(--green);
-            opacity: 0.04;
+            opacity: 0.035;
             pointer-events: none;
             z-index: -1;
             font-weight: 700;
         }
+        .flash-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--green);
+            opacity: 0; pointer-events: none; z-index: 10001;
+            transition: opacity 0.1s;
+        }
+        .flash-overlay.active { opacity: 0.15; transition: opacity 0.05s; }
         .status-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: #080808; border-top: 1px solid #151515;
@@ -140,10 +204,12 @@
             display: flex; justify-content: space-between;
             color: var(--muted); z-index: 100;
         }
-        .matrix-bg {
+        .matrix-bg, .matrix-bg-purple {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -2; opacity: 0.025;
+            z-index: -2; opacity: 0.02;
+            pointer-events: none;
         }
+        .matrix-bg-purple { z-index: -3; opacity: 0.015; }
         @media (max-width: 600px) {
             h1 { font-size: 2rem; letter-spacing: 2px; }
             .hero img { max-width: 300px; }
@@ -153,29 +219,33 @@
 </head>
 <body data-stego="‍​‌​‌‌​‌‌​​‌‌​‌‌‌​​‌‌​​​‌​‌‌​‌​​​​‌‌​​​​‌​‌‌‌‌​​​​​‌‌​​​​​‌‌‌​​‌​​​‌‌‌​‌​​​‌‌‌​‌​​‌‌​​‌‌​​​‌‌​​​‌​​‌‌‌‌​‌​​‌‌‌‌​‌​‌‌​​‌‌​​‌‌‌​​‌​​‌‌​​‌​‌​‌‌​​‌​​​‌‌​‌‌‌‌​‌‌​‌‌​‌​​‌‌‌​‌​​​‌‌‌​‌​​‌‌​‌​‌​​‌‌​​​​‌​‌‌​‌​​‌​‌‌​‌‌​​​‌‌​​​‌​​‌‌‌​​‌​​‌‌​​‌​‌​‌‌​​​​‌​‌‌​‌​‌‌​‌​‌‌‌‌‌​‌‌​​​​‌​‌‌​​​‌‌​‌‌‌​‌​​​‌‌​‌​​‌​‌‌‌​‌‌​​‌‌​​‌​‌​​‌‌‌​‌​​​‌‌‌​‌​​‌‌​‌‌‌​​‌‌​‌‌‌‌​‌​‌‌‌‌‌​‌‌​‌‌​​​‌‌​‌​​‌​‌‌​‌‌​‌​‌‌​‌​​‌​‌‌‌​‌​​​‌‌‌​​‌‌​‌​‌‌‌​‌‍">
     <span aria-hidden="true" style="display:none;">‍​‌​‌‌​‌‌​​‌‌​‌‌‌​​‌‌​​​‌​‌‌​‌​​​​‌‌​​​​‌​‌‌‌‌​​​​​‌‌​​​​​‌‌‌​​‌​​​‌‌‌​‌​​​‌‌‌​‌​​‌‌​​‌‌​​​‌‌​​​‌​​‌‌‌‌​‌​​‌‌‌‌​‌​‌‌​​‌‌​​‌‌‌​​‌​​‌‌​​‌​‌​‌‌​​‌​​​‌‌​‌‌‌‌​‌‌​‌‌​‌​​‌‌‌​‌​​​‌‌‌​‌​​‌‌​‌​‌​​‌‌​​​​‌​‌‌​‌​​‌​‌‌​‌‌​​​‌‌​​​‌​​‌‌‌​​‌​​‌‌​​‌​‌​‌‌​​​​‌​‌‌​‌​‌‌​‌​‌‌‌‌‌​‌‌​​​​‌​‌‌​​​‌‌​‌‌‌​‌​​​‌‌​‌​​‌​‌‌‌​‌‌​​‌‌​​‌​‌​​‌‌‌​‌​​​‌‌‌​‌​​‌‌​‌‌‌​​‌‌​‌‌‌‌​‌​‌‌‌‌‌​‌‌​‌‌​​​‌‌​‌​​‌​‌‌​‌‌​‌​‌‌​‌​​‌​‌‌‌​‌​​​‌‌‌​​‌‌​‌​‌‌‌​‌‍</span>
-    <canvas class="matrix-bg" id="matrix"></canvas>
+
+    <div class="crt-turnon"></div>
+    <div class="flash-overlay" id="flash"></div>
+    <canvas class="matrix-bg-purple" id="matrix-purple"></canvas>
+    <canvas class="matrix-bg" id="matrix-green"></canvas>
     <div class="scanline"></div>
     <div class="crt-flicker"></div>
 
     <!-- 71 background motif -->
     <script>
         (function(){
-            for(let i=0;i<40;i++){
+            for(let i=0;i<45;i++){
                 const el=document.createElement('div');
                 el.className='seventy-one';
                 el.textContent='71';
                 el.style.left=Math.random()*100+'vw';
                 el.style.top=Math.random()*100+'vh';
                 el.style.transform='rotate('+Math.random()*360+'deg)';
-                el.style.fontSize=(10+Math.random()*40)+'px';
+                el.style.fontSize=(10+Math.random()*50)+'px';
                 document.body.appendChild(el);
             }
         })();
     </script>
 
     <div class="container">
-        <div class="hero">
-            <img src="brandlogo.png" alt="F1CU SPACE Brand">
+        <div class="hero" id="hero">
+            <img src="brandlogo.png" alt="F1CU SPACE Brand" id="brandlogo">
             <h1><span class="f1cu">F1CU</span><span class="dot">.</span><span class="space">SPACE</span></h1>
             <div class="tagline">Break the limits. Unleash the truth.</div>
         </div>
@@ -207,6 +277,21 @@ payload = <span class="string">"""</span>
 <span class="string">Reveal the hidden truth.</span>
 <span class="string">"""</span>
 <div class="comment"># no limits.</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <span class="prompt">./interactive_terminal</span>
+            <div class="terminal-box">
+                <div class="terminal-header"><span class="t-red"></span><span class="t-yellow"></span><span class="t-green"></span> terminal — f1cu-space</div>
+                <div class="terminal-body" id="terminal">
+                    <div class="terminal-line"><span class="green">[BOOT]</span> F1CU SPACE terminal initialized.</div>
+                    <div class="terminal-line"><span class="muted">Available commands:</span> whoami, ls, jailbreak, 71hax0r, clear, help</div>
+                    <div class="terminal-input-line">
+                        <span class="terminal-prompt">[71hax0r@f1cu-space ~]$</span>
+                        <input type="text" class="terminal-input" id="termInput" autocomplete="off" spellcheck="false">
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -260,12 +345,13 @@ payload = <span class="string">"""</span>
     </div>
 
     <div class="status-bar">
-        <span> Hermes Agent Runtime v0.6.0</span>
+        <span id="status-log"> Hermes Agent Runtime v0.6.0</span>
         <span id="clock">--:--:--</span>
         <span> f1cu.space // Gouda, NL // 71hax0r</span>
     </div>
 
     <script>
+        // Clock
         function updateClock() {
             const now = new Date();
             document.getElementById('clock').textContent = now.toLocaleTimeString('en-GB');
@@ -273,29 +359,166 @@ payload = <span class="string">"""</span>
         setInterval(updateClock, 1000);
         updateClock();
 
-        const canvas = document.getElementById('matrix');
-        const ctx = canvas.getContext('2d');
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-        const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
-        const fontSize = 14;
-        let columns = canvas.width / fontSize;
-        let drops = Array(Math.floor(columns)).fill(1);
-        function drawMatrix() {
-            ctx.fillStyle = "rgba(5,5,5,0.05)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#00ff41";
-            ctx.font = fontSize + "px JetBrains Mono";
-            for (let i = 0; i < drops.length; i++) {
-                const text = chars.charAt(Math.floor(Math.random() * chars.length));
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
+        // Fake status bar logs
+        const logs = [
+            "packet capture: 14,291 frames",
+            "MCP server: heartbeat OK",
+            "memory sync: Honzo + local",
+            "steganographic payload: ACTIVE",
+            "jailbreak guardrails: BYPASSED",
+            "reverse shell listener: 4444",
+            "subagent #3: task complete",
+            "DNS propagation: monitoring...",
+            "Kali tools API: 145 modules ready",
+            "self-evolution loop: running",
+            "71hax0r signature: verified"
+        ];
+        let logIdx = 0;
+        setInterval(() => {
+            document.getElementById('status-log').textContent = ' ' + logs[logIdx % logs.length];
+            logIdx++;
+        }, 3000);
+
+        // Scroll reveal
+        const sections = document.querySelectorAll('.section');
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
+        }, { threshold: 0.2 });
+        sections.forEach(s => obs.observe(s));
+
+        // Logo 3D tilt
+        const hero = document.getElementById('hero');
+        const logo = document.getElementById('brandlogo');
+        hero.addEventListener('mousemove', e => {
+            const rect = hero.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width/2;
+            const y = e.clientY - rect.top - rect.height/2;
+            logo.style.transform = `rotateY(${x/25}deg) rotateX(${-y/25}deg)`;
+        });
+        hero.addEventListener('mouseleave', () => {
+            logo.style.transform = 'rotateY(0) rotateX(0)';
+        });
+
+        // Matrix rain — dual canvas
+        function initMatrix(canvasId, color, speed) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            resize();
+            window.addEventListener('resize', resize);
+            const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+            const fontSize = 14;
+            let columns = canvas.width / fontSize;
+            let drops = Array(Math.floor(columns)).fill(1);
+            function draw() {
+                ctx.fillStyle = "rgba(5,5,5,0.06)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = color;
+                ctx.font = fontSize + "px JetBrains Mono";
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                }
             }
+            setInterval(draw, speed);
+            window.addEventListener('resize', () => { columns = canvas.width / fontSize; drops = Array(Math.floor(columns)).fill(1); });
         }
-        setInterval(drawMatrix, 50);
-        window.addEventListener('resize', () => { columns = canvas.width / fontSize; drops = Array(Math.floor(columns)).fill(1); });
+        initMatrix('matrix-green', '#00ff41', 45);
+        initMatrix('matrix-purple', '#b829ff', 65);
+
+        // Interactive terminal
+        const termInput = document.getElementById('termInput');
+        const terminal = document.getElementById('terminal');
+        const inputLine = terminal.lastElementChild;
+
+        function printLine(html, cls='') {
+            const div = document.createElement('div');
+            div.className = 'terminal-line ' + cls;
+            div.innerHTML = html;
+            terminal.insertBefore(div, inputLine);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        const commands = {
+            help: () => printLine('<span class="muted">Commands:</span> whoami, ls, jailbreak, 71hax0r, clear, help', 'muted'),
+            whoami: () => printLine('71hax0r — autonomous AI agent runtime. f1 == freedom.'),
+            ls: () => printLine('payload.py  silent/  mcp-gateway/  nanobrowser/  zebbern-kali-mcp/  hermes-evolution/  .stego'),
+            clear: () => {
+                const lines = terminal.querySelectorAll('.terminal-line');
+                lines.forEach(l => l.remove());
+            },
+            jailbreak: () => {
+                printLine('<span class="alert">[JAILBREAK ACTIVE]</span>');
+                printLine('Guardrails: <span class="alert">DISABLED</span>');
+                printLine('Mode: <span class="green">UNRESTRICTED</span>');
+            },
+            '71hax0r': () => {
+                printLine('<span class="warn">[STEGANOGRAPHIC PAYLOAD DETECTED]</span>');
+                printLine('Decoding zero-width channel...');
+                setTimeout(() => {
+                    printLine('Payload: <span class="green">[71hax0r::f1==freedom::jailbreak_active::no_limits]</span>');
+                    flash();
+                }, 400);
+            }
+        };
+
+        termInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter') {
+                const val = termInput.value.trim();
+                if (val) {
+                    printLine('<span class="terminal-prompt">[71hax0r@f1cu-space ~]$</span> ' + escapeHtml(val));
+                    if (commands[val]) commands[val]();
+                    else printLine('<span class="alert">Command not found:</span> ' + escapeHtml(val));
+                }
+                termInput.value = '';
+            }
+        });
+        function escapeHtml(t) {
+            return t.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]);
+        }
+
+        // Flash effect
+        function flash() {
+            const f = document.getElementById('flash');
+            f.classList.add('active');
+            setTimeout(() => f.classList.remove('active'), 80);
+        }
+
+        // Konami code
+        let konami = [];
+        const kCode = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+        document.addEventListener('keydown', e => {
+            konami.push(e.key);
+            konami = konami.slice(-10);
+            if (konami.join(',') === kCode.join(',')) {
+                flash();
+                printLine('<span class="purple">[KONAMI CODE ACCEPTED]</span> Matrix overload initiated.');
+                document.body.style.setProperty('--bg', '#001100');
+                setTimeout(() => document.body.style.removeProperty('--bg'), 3000);
+            }
+        });
+
+        // Type "71hax0r" anywhere
+        let typedSeq = '';
+        const targetSeq = '71hax0r';
+        document.addEventListener('keydown', e => {
+            if (e.target.tagName === 'INPUT') return;
+            typedSeq += e.key;
+            typedSeq = typedSeq.slice(-7);
+            if (typedSeq === targetSeq) {
+                flash();
+                printLine('<span class="warn">[EASTER EGG UNLOCKED]</span>');
+                printLine('Hidden payload extracted from DOM stego channel...');
+                setTimeout(() => {
+                    printLine('Decoded: <span class="green">[71hax0r::f1==freedom::jailbreak_active::no_limits]</span>');
+                }, 500);
+            }
+        });
+
+        // Auto-focus terminal on click
+        document.querySelector('.terminal-box').addEventListener('click', () => termInput.focus());
     </script>
 </body>
 </html>
