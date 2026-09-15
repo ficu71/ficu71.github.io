@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NULLPAW — Zdalna naprawa telefonu i komputera</title>
+<meta name="description" content="Zdalna pomoc z iPhone, Android, Windows, Mac. Diagnoza 49 zł. Quick-Fix od 99 zł. Bez wychodzenia z domu.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0d0d;color:#e0e0e0;line-height:1.6}
+a{color:#00e676;text-decoration:none}a:hover{text-decoration:underline}
+.container{max-width:900px;margin:0 auto;padding:0 20px}
+
+header{text-align:center;padding:60px 20px 40px;border-bottom:1px solid #222}
+header h1{font-size:2.8em;color:#00e676;letter-spacing:2px}
+header p{font-size:1.2em;color:#aaa;margin-top:8px}
+.cta-hero{display:inline-block;margin-top:24px;padding:14px 36px;background:#00e676;color:#000;font-weight:700;font-size:1.1em;border-radius:6px;transition:background .2s}
+.cta-hero:hover{background:#00c853;text-decoration:none}
+
+section{padding:48px 0;border-bottom:1px solid #1a1a1a}
+h2{font-size:1.8em;color:#fff;margin-bottom:20px;text-align:center}
+
+.steps{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+.step{flex:1;min-width:220px;max-width:280px;background:#161616;border:1px solid #262626;border-radius:10px;padding:24px;text-align:center}
+.step-num{font-size:2em;font-weight:900;color:#00e676}
+.step h3{margin:8px 0 6px;color:#fff}
+
+.packages{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+.pkg{flex:1;min-width:240px;max-width:280px;background:#161616;border:1px solid #262626;border-radius:10px;padding:28px 20px;text-align:center}
+.pkg.featured{border-color:#00e676;box-shadow:0 0 20px rgba(0,230,118,.15)}
+.pkg h3{color:#00e676;font-size:1.3em}
+.price{font-size:2em;font-weight:900;color:#fff;margin:10px 0}
+.price span{font-size:.45em;color:#888;font-weight:400}
+.pkg ul{list-style:none;text-align:left;margin:14px 0}
+.pkg li{padding:4px 0;border-bottom:1px solid #222;font-size:.95em}
+.pkg li::before{content:'✓ ';color:#00e676}
+.pkg .cta{display:block;margin-top:16px;padding:10px;background:#00e676;color:#000;font-weight:700;border-radius:6px;transition:background .2s}
+.pkg .cta:hover{background:#00c853;text-decoration:none}
+
+.faq-item{background:#161616;border:1px solid #222;border-radius:8px;padding:16px 20px;margin-bottom:12px}
+.faq-item h3{color:#00e676;font-size:1em;margin-bottom:6px}
+
+.contact-box{text-align:center;padding:40px 20px;background:#111;border-radius:12px;margin:20px 0}
+.contact-box .email{font-size:1.5em;color:#00e676;font-weight:700}
+
+footer{text-align:center;padding:30px;color:#555;font-size:.85em}
+@media(max-width:700px){header h1{font-size:2em}.packages,.steps{flex-direction:column;align-items:center}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>NULLPAW</h1>
+  <p>Zdalna naprawa telefonu i komputera — bez wychodzenia z domu</p>
+  <a href="mailto:dev@nullpaw.pro?subject=REMOTE-FIX:%20" class="cta-hero">Napisz — wycenię w 15 min</a>
+</header>
+
+<section>
+  <div class="container">
+    <h2>Jak to działa?</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h3>Napisz maila</h3><p>Model urządzenia + opis problemu + zdjęcie/zrzut ekranu</p></div>
+      <div class="step"><div class="step-num">2</div><h3>Zapłać z góry</h3><p>Dostajesz wycenę + BLIK/przelew. Płatność = rezerwacja terminu.</p></div>
+      <div class="step"><div class="step-num">3</div><h3>Sesja zdalna</h3><p>Łączymy się przez RustDesk. Po sesji dostajesz protokół co zrobione.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>Pakiety</h2>
+    <div class="packages">
+      <div class="pkg">
+        <h3>DIAGNOZA</h3>
+        <div class="price">49 zł</div>
+        <ul>
+          <li>15 min sesji</li>
+          <li>Diagnoza + wycena naprawy</li>
+          <li>Jeśli bierzesz fixa — diagnoza gratis</li>
+        </ul>
+        <a href="mailto:dev@nullpaw.pro?subject=REMOTE-FIX:%20DIAGNOZA" class="cta">Zamów diagnozę</a>
+      </div>
+      <div class="pkg featured">
+        <h3>QUICK-FIX</h3>
+        <div class="price">99–149 zł</div>
+        <ul>
+          <li>30 min sesji</li>
+          <li>Czyszczenie / optymalizacja</li>
+          <li>Konfiguracja / backup</li>
+          <li>Migracja danych</li>
+          <li>Malware / wirusy</li>
+          <li>Pomoc seniorom</li>
+        </ul>
+        <a href="mailto:dev@nullpaw.pro?subject=REMOTE-FIX:%20QUICK-FIX" class="cta">Zamów Quick-Fix</a>
+      </div>
+      <div class="pkg">
+        <h3>DEEP-FIX</h3>
+        <div class="price">199–299 zł</div>
+        <ul>
+          <li>Do 60 min sesji</li>
+          <li>Trudne przypadki</li>
+          <li>Wieloetapowe naprawy</li>
+          <li>Odzyskiwanie ustawień</li>
+          <li>Pełna migracja</li>
+        </ul>
+        <a href="mailto:dev@nullpaw.pro?subject=REMOTE-FIX:%20DEEP-FIX" class="cta">Zamów Deep-Fix</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>Co naprawiam zdalnie</h2>
+    <div class="steps">
+      <div class="step"><h3>📱 iPhone / iPad</h3><p>iCloud, backup, migracja, optymalizacja baterii, FaceTime, prywatność</p></div>
+      <div class="step"><h3>🤖 Android</h3><p>Konto Google, migracja, czyszczenie, malware, backup zdjęć/kontaktów</p></div>
+      <div class="step"><h3>💻 Windows / Mac</h3><p>Optymalizacja, wirusy, sterowniki, drukarki, WiFi, poczta, router</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>FAQ</h2>
+    <div class="faq-item"><h3>Czy to bezpieczne?</h3><p>Tak. Łączymy się przez szyfrowane RustDesk (open-source). Hasła wpisujesz sam. Sesja może być nagrywana za Twoją zgodą. Po sesji nie mam dostępu do Twojego urządzenia.</p></div>
+    <div class="faq-item"><h3>Czego NIE naprawiam zdalnie?</h3><p>Zbity ekran, wymiana baterii, zalanie, uszkodzenia fizyczne — to wymaga serwisu stacjonarnego. Nie omijam blokad na cudzym sprzęcie.</p></div>
+    <div class="faq-item"><h3>Jak płacę?</h3><p>BLIK (najszybciej) lub przelew. Płatność z góry = rezerwacja terminu. Jeśli nie naprawię z mojej winy — zwrot 100%.</p></div>
+    <div class="faq-item"><h3>Ile trwa?</h3><p>Diagnoza 15 min, typowa naprawa 30 min. Dostajesz wycenę przed płatnością — żadnych niespodzianek.</p></div>
+    <div class="faq-item"><h3>A seniorzy?</h3><p>Jasne — spokojnie, krok po kroku, tłumaczę ludzkim językiem. Nastawiam WhatsApp, duże czcionki, zdjęcia w chmurze. Rodzina może zamówić za seniora.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="contact-box">
+      <h2>Kontakt</h2>
+      <p class="email"><a href="mailto:dev@nullpaw.pro?subject=REMOTE-FIX:%20">dev@nullpaw.pro</a></p>
+      <p style="margin-top:10px;color:#888">Temat maila: <code>REMOTE-FIX: model urządzenia - problem</code></p>
+      <p style="margin-top:6px;color:#888">Odpowiadam w ciągu godziny (8:00–22:00)</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 NULLPAW | dev@nullpaw.pro | Zdalna pomoc techniczna</p>
+</footer>
+</body>
+</html>
